@@ -7,6 +7,7 @@ api-version: "1.13"
 authors:
   - mfnalex
   - JEFF Media GbR
+  - PadowYT2
 database: false
 load: POSTWORLD
 commands:
@@ -15,15 +16,6 @@ commands:
     permission: doorsreloaded.reload
     usage: /<command>
 permissions:
-  doorsreloaded.doubledoors:
-    description: Allows to open double doors with one click
-    default: true
   doorsreloaded.reload:
     description: Allows to reload the config using /doorsreloaded
-    default: op
-  doorsreloaded.knock:
-    description: Allows to knock on doors using left-click
-    default: true
-  doorsreloaded.irondoors:
-    description: Allows to open iron doors using right-click
     default: op
