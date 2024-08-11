@@ -7,6 +7,7 @@ import de.jeff_media.doorsreloaded.data.PossibleNeighbour;
 import de.jeff_media.doorsreloaded.listeners.DoorListener;
 import de.jeff_media.updatechecker.UpdateChecker;
 import de.jeff_media.updatechecker.UserAgentBuilder;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -21,19 +22,17 @@ import java.io.IOException;
 public class Main extends JavaPlugin {
 
     private static Main instance;
-    private static final PossibleNeighbour[] possibleNeighbours = new PossibleNeighbour[] {
-            new PossibleNeighbour(0, -1, Door.Hinge.RIGHT, BlockFace.EAST),
-            new PossibleNeighbour(0, 1, Door.Hinge.LEFT, BlockFace.EAST),
-
-            new PossibleNeighbour(1,0, Door.Hinge.RIGHT, BlockFace.SOUTH),
-            new PossibleNeighbour(-1,0, Door.Hinge.LEFT, BlockFace.SOUTH),
-
-            new PossibleNeighbour(0, 1, Door.Hinge.RIGHT, BlockFace.WEST),
-            new PossibleNeighbour(0, -1, Door.Hinge.LEFT, BlockFace.WEST),
-
-            new PossibleNeighbour(-1,0, Door.Hinge.RIGHT, BlockFace.NORTH),
-            new PossibleNeighbour(1,0, Door.Hinge.LEFT, BlockFace.NORTH)
-    };
+    private static final PossibleNeighbour[] possibleNeighbours =
+            new PossibleNeighbour[] {
+                new PossibleNeighbour(0, -1, Door.Hinge.RIGHT, BlockFace.EAST),
+                new PossibleNeighbour(0, 1, Door.Hinge.LEFT, BlockFace.EAST),
+                new PossibleNeighbour(1, 0, Door.Hinge.RIGHT, BlockFace.SOUTH),
+                new PossibleNeighbour(-1, 0, Door.Hinge.LEFT, BlockFace.SOUTH),
+                new PossibleNeighbour(0, 1, Door.Hinge.RIGHT, BlockFace.WEST),
+                new PossibleNeighbour(0, -1, Door.Hinge.LEFT, BlockFace.WEST),
+                new PossibleNeighbour(-1, 0, Door.Hinge.RIGHT, BlockFace.NORTH),
+                new PossibleNeighbour(1, 0, Door.Hinge.LEFT, BlockFace.NORTH)
+            };
     private boolean redstoneEnabled = false;
 
     public static Main getInstance() {
@@ -45,7 +44,6 @@ public class Main extends JavaPlugin {
             getLogger().warning("[DEBUG] " + text);
         }
     }
-
 
     public Door getBottomDoor(Door door, Block block) {
 
@@ -63,19 +61,18 @@ public class Main extends JavaPlugin {
         return null; // Door is not matching
     }
 
-
     public Block getOtherPart(Door door, Block block) {
-        if(door == null) return null;
+        if (door == null) return null;
         for (PossibleNeighbour neighbour : possibleNeighbours) {
-            if(neighbour.getFacing() != door.getFacing()) continue;
+            if (neighbour.getFacing() != door.getFacing()) continue;
             if (neighbour.getHinge() != door.getHinge()) continue;
             Block relative = block.getRelative(neighbour.getOffsetX(), 0, neighbour.getOffsetZ());
             if (relative.getType() != block.getType()) continue;
             if (!(relative.getBlockData() instanceof Door)) continue;
             Door otherDoor = ((Door) relative.getBlockData());
             if (otherDoor.getHinge() == neighbour.getHinge()) continue;
-            if(door.isOpen() != otherDoor.isOpen()) continue;
-            if(otherDoor.getFacing() != neighbour.getFacing()) continue;
+            if (door.isOpen() != otherDoor.isOpen()) continue;
+            if (otherDoor.getFacing() != neighbour.getFacing()) continue;
             return relative;
         }
         return null;
@@ -91,7 +88,9 @@ public class Main extends JavaPlugin {
                 .suppressUpToDateMessage(true);
 
         if (getConfig().getString(Config.CHECK_FOR_UPDATES).equalsIgnoreCase("true")) {
-            UpdateChecker.getInstance().checkEveryXHours(getConfig().getDouble(Config.CHECK_FOR_UPDATES_INTERVAL)).checkNow();
+            UpdateChecker.getInstance()
+                    .checkEveryXHours(getConfig().getDouble(Config.CHECK_FOR_UPDATES_INTERVAL))
+                    .checkNow();
         } else if (getConfig().getString(Config.CHECK_FOR_UPDATES).equalsIgnoreCase("on-startup")) {
             UpdateChecker.getInstance().checkNow();
         } else {
@@ -120,7 +119,7 @@ public class Main extends JavaPlugin {
     public void reload() {
         saveDefaultConfig();
         try {
-            new ConfigUpdater(this,"config.yml","configupdate.yml").update();
+            new ConfigUpdater(this, "config.yml", "configupdate.yml").update();
         } catch (IOException e) {
             getLogger().severe("Could not update config.yml:");
             e.printStackTrace();
@@ -134,11 +133,13 @@ public class Main extends JavaPlugin {
         otherDoorBlock.setBlockData(otherDoor);
     }
 
-    public void toggleOtherDoor(Block block, Block otherBlock, boolean open, boolean causedByRedstone) {
+    public void toggleOtherDoor(
+            Block block, Block otherBlock, boolean open, boolean causedByRedstone) {
         toggleOtherDoor(block, otherBlock, open, causedByRedstone, false);
     }
 
-    public void toggleOtherDoor(Block block, Block otherBlock, boolean open, boolean causedByRedstone, boolean force) {
+    public void toggleOtherDoor(
+            Block block, Block otherBlock, boolean open, boolean causedByRedstone, boolean force) {
 
         if (!(block.getBlockData() instanceof Door)) return;
         if (!(otherBlock.getBlockData() instanceof Door)) return;
@@ -154,7 +155,7 @@ public class Main extends JavaPlugin {
         boolean openNow = door.isOpen();
         new BukkitRunnable() {
             @Override
-                public void run() {
+            public void run() {
                 if (!(otherBlock.getBlockData() instanceof Door)) return;
                 Door newDoor = (Door) block.getBlockData();
                 if (!force && newDoor.isOpen() == openNow) {
@@ -162,8 +163,6 @@ public class Main extends JavaPlugin {
                 }
                 toggleDoor(otherBlock, otherDoor, open);
             }
-            }.runTaskLater(this, 1L);
-
+        }.runTaskLater(this, 1L);
     }
-
 }

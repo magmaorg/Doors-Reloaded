@@ -34,11 +34,15 @@ public class PossibleNeighbour {
 
     @Override
     public String toString() {
-        return "PossibleNeighbour{" +
-                "offsetX=" + offsetX +
-                ", offsetZ=" + offsetZ +
-                ", facing=" + facing +
-                ", hinge=" + hinge +
-                '}';
+        return "PossibleNeighbour{"
+                + "offsetX="
+                + offsetX
+                + ", offsetZ="
+                + offsetZ
+                + ", facing="
+                + facing
+                + ", hinge="
+                + hinge
+                + '}';
     }
 }

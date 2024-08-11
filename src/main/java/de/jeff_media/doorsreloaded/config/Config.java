@@ -1,6 +1,7 @@
 package de.jeff_media.doorsreloaded.config;
 
 import de.jeff_media.doorsreloaded.Main;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -48,6 +49,6 @@ public class Config {
         conf.addDefault(AUTOCLOSE_DELAY, 5.0);
         conf.addDefault(DEBUG, false);
 
-        metrics = new Metrics(main,11153);
+        metrics = new Metrics(main, 11153);
     }
 }

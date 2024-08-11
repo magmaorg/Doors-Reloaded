@@ -2,6 +2,7 @@ package de.jeff_media.doorsreloaded.commands;
 
 import de.jeff_media.doorsreloaded.Main;
 import de.jeff_media.doorsreloaded.config.Permissions;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +17,7 @@ public class ReloadCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand( CommandSender sender,  Command command,  String alias,  String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
 
         if (!sender.hasPermission(Permissions.RELOAD)) {
             sender.sendMessage(command.getPermissionMessage());
